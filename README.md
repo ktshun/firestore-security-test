@@ -11,6 +11,9 @@ $ firebase setup:emulators:firestore
 $ firebase emulators:start
 ```
 
+2. ProjectIdの書き換え
+`firestore.test.ts`のl.8に記載されている`projectId`を1で選択したものに書き換え
+
 2. UT実行
 ```bash
 $ yarn test
