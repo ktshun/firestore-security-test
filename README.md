@@ -1,7 +1,7 @@
 # firestore-security-test
 ## How to run test
 
-1. Firebaseエミュレータの起動
+#### 1. Firebaseエミュレータの起動
 ```bash
 ## 初期設定（既に終わっている場合は不要）
 $ npm install -g firebase-tools
@@ -11,10 +11,10 @@ $ firebase setup:emulators:firestore
 $ firebase emulators:start
 ```
 
-2. ProjectIdの書き換え
+#### 2. ProjectIdの書き換え
 `firestore.test.ts`のl.8に記載されている`projectId`を1で選択したものに書き換え
 
-３. UT実行
+#### ３. UT実行
 ```bash
 $ yarn test
 ```
