@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthorizedUser() {
+      return request.auth != null;
+    }
+    match /rooms/{roomId} {
+      function isUserInRoom() {
+        return request.auth.uid in resource.data.members;
+      }
+      function isUserInRoomForMessageValidation() {
+        return request.auth.uid in get(/databases/$(database)/documents/rooms/$(roomId)).data.members;
+      }
+      function isUserClient() {
+        return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type == "CLIENT";
+      }
+      function isRoomVisibilityAll() {
+        return get(/databases/$(database)/documents/rooms/$(roomId)).data.visibility == "all";
+      }
+      allow read: if isAuthorizedUser() && isUserInRoom();
+
+      match /messages/{messageId} {
+        function canReadMessage() {
+          return isAuthorizedUser() && isUserInRoomForMessageValidation() && (isUserClient() || isRoomVisibilityAll());
+        }
+        allow read, write: if canReadMessage()
+      }
+    }
+  }
+}
